@@ -2,9 +2,7 @@ streamlit
 requests
 beautifulsoup4
 pandas
-sentence-transformers==2.2.2
-huggingface-hub==0.19.4
-torch==2.1.2
+sentence-transformers
 scikit-learn
 numpy
 plotly
