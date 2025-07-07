@@ -24,7 +24,7 @@ from selenium.common.exceptions import WebDriverException
 import time
 
 import cloudscraper
-#from curl_cffi import requests as curl_requests
+from curl_cffi import requests as curl_requests
 import requests
 
 # Configure Streamlit page
@@ -59,42 +59,42 @@ def extract_content(url: str) -> str:
         html = response.content
         source_info = "Live version"
     except Exception as e:
-        st.warning(f"Cloudscraper failed for {url}. Trying scraper api...")
+        st.warning(f"Cloudscraper failed for {url}. Trying curl_cffi...")
         
-       # # 2. Try curl_cffi with browser-like impersonation
-       # try:
-        #    # Try different browser profiles
-        #    for impersonate in ['chrome110', 'edge99', 'safari15_5']:
-          #      try:
-           #         response = curl_requests.get(
-           #             url,
-            #            timeout=10,
-            #            impersonate=impersonate,
-             #           headers={
-             #               'Accept': 'text/html,application/xhtml+xml',
-             #               'Accept-Language': 'en-US,en;q=0.9',
-             #               'Sec-Fetch-Dest': 'document',
-             #               'Sec-Fetch-Mode': 'navigate',
-             #               'Sec-Fetch-Site': 'none',
-             #               'Sec-Fetch-User': '?1',
-             #               'Upgrade-Insecure-Requests': '1'
-             #           }
-             #       )
-               #     if response.status_code == 200:
-               #         html = response.content
-               #         source_info = f"Live version (curl_cffi/{impersonate})"
-               #         break
-             #   except Exception:
-                #    continue
+        # 2. Try curl_cffi with browser-like impersonation
+        try:
+            # Try different browser profiles
+            for impersonate in ['chrome110', 'edge99', 'safari15_5']:
+                try:
+                    response = curl_requests.get(
+                        url,
+                        timeout=10,
+                        impersonate=impersonate,
+                        headers={
+                            'Accept': 'text/html,application/xhtml+xml',
+                            'Accept-Language': 'en-US,en;q=0.9',
+                            'Sec-Fetch-Dest': 'document',
+                            'Sec-Fetch-Mode': 'navigate',
+                            'Sec-Fetch-Site': 'none',
+                            'Sec-Fetch-User': '?1',
+                            'Upgrade-Insecure-Requests': '1'
+                        }
+                    )
+                    if response.status_code == 200:
+                        html = response.content
+                        source_info = f"Live version (curl_cffi/{impersonate})"
+                        break
+                except Exception:
+                    continue
                     
-          #  if not html:
-           #     raise Exception("All curl_cffi profiles failed")
+            if not html:
+                raise Exception("All curl_cffi profiles failed")
                 
-        #except Exception as e:
-         #   st.warning(f"curl_cffi failed for {url}. Trying ScraperAPI...")
+        except Exception as e:
+            st.warning(f"curl_cffi failed for {url}. Trying ScraperAPI...")
             
             # 3. Try ScraperAPI
-        try:
+            try:
                 payload = {
                     'api_key': 'ce980c6f62e384976a3765ac2e359d4a',  # Replace with your actual key
                     'url': url,
@@ -110,7 +110,7 @@ def extract_content(url: str) -> str:
                 response.raise_for_status()
                 html = response.content
                 source_info = "ScraperAPI-proxied version"
-        except Exception as e:
+            except Exception as e:
                 st.warning(f"ScraperAPI failed for {url}. Trying fallbacks...")
                 
                 # 4. Try Wayback Machine fallback
