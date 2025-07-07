@@ -1,8 +1,6 @@
 services:
   - type: web
-    name: your-app-name
+    name: scraper
     env: python
-    plan: free  # or starter if paid
     buildCommand: pip install -r requirements.txt
     startCommand: streamlit run dash.py --server.port=$PORT --server.address=0.0.0.0
-    buildTimeoutSeconds: 1800  # 30 minutes
