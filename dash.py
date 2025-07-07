@@ -23,6 +23,10 @@ from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import WebDriverException
 import time
 
+import cloudscraper
+from curl_cffi import requests as curl_requests
+import requests
+
 # Configure Streamlit page
 st.set_page_config(
     page_title="Semantic Similarity Backlink Analyzer",
@@ -41,11 +45,6 @@ if 'cache' not in st.session_state:
 def load_model():
     """Load the sentence transformer model with caching"""
     return SentenceTransformer('all-MiniLM-L6-v2')
-
-import cloudscraper
-from requests_html import HTMLSession
-from curl_cffi import requests as curl_requests
-import requests
 
 
 def extract_content(url: str) -> str:
