@@ -1,0 +1,10 @@
+streamlit
+requests
+beautifulsoup4
+pandas
+sentence-transformers
+scikit-learn
+numpy
+plotly
+undetected-chromedriver
+selenium
